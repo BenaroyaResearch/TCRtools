@@ -27,7 +27,6 @@ match_TCR_chains(
 A data frame containing the TCR chain information (junction and optionally V and J genes) and the identifiers for the two cells with matching chains. Identifier column names in the returned data frame are "tcr1" and "tcr2".
 }
 \description{
-Determine matching TCR chain sequences among a set of single-cell TCR sequences.
-purpose is to show clonotype sharing among cells within and between samples. Samples can optionally
-be colored by grouping variables, and there are multiple options for determining TCR clonality.
+Determine matching TCR chain sequences among a set of single-cell TCR sequences. By default, chains
+are matched by the junction, V gene, and J gene. Matching by V and/or J genes can be disabled.
 }

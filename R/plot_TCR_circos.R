@@ -2,7 +2,7 @@
 #'
 #' This function combines a number of steps for generating a circos plot from TCR sequences. The
 #' purpose is to show clonotype sharing among cells within and between samples. Samples can optionally
-#' be colored by grouping variables, and there are multiple options for determining TCR clonality.
+#' be colored by grouping variables.
 #' 
 #' @param tcr_cells data frame containing information at the cell level. Should include identifiers at minimum, plus optional columns for coloring the cells around the circos plot. Cells will be plotted in the order in which they are listed in this data frame.
 #' @param tcr_links data frame with links to draw between cells. Should include identifiers for the two cells, plus optional columns for color and/or width of the links to be drawn. Often the output of \code{tabulate_shared_TCR_chains}.
@@ -27,7 +27,7 @@ plot_TCR_circos <-
     link_colors=NULL, link_width=NULL,
     filename=NULL, plottype="pdf", plotdims=c(12,12)) {
     
-    if (!is.null(filename)) filename <- match.arg(filename, choices=c("pdf", "png"))
+    if (!is.null(filename)) plottype <- match.arg(plottype, choices=c("pdf", "png"))
     
     # define limits for plotting
     n_cells <- nrow(tcr_cells)

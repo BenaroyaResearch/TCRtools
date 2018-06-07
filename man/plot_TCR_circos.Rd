@@ -31,5 +31,5 @@ plot_TCR_circos(
 \description{
 This function combines a number of steps for generating a circos plot from TCR sequences. The
 purpose is to show clonotype sharing among cells within and between samples. Samples can optionally
-be colored by grouping variables, and there are multiple options for determining TCR clonality.
+be colored by grouping variables.
 }

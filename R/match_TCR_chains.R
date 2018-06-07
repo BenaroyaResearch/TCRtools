@@ -1,9 +1,7 @@
 #' Match the TCR junctions and (optionally) V and J genes between single-cell libraries
 #'
-#' Determine matching TCR chain sequences among a set of single-cell TCR sequences.
-#' purpose is to show clonotype sharing among cells within and between samples. Samples can optionally
-#' be colored by grouping variables, and there are multiple options for determining TCR clonality.
-#' 
+#' Determine matching TCR chain sequences among a set of single-cell TCR sequences. By default, chains
+#' are matched by the junction, V gene, and J gene. Matching by V and/or J genes can be disabled.
 #' @param tcrs a data frame containing the TCR sequences. Should include an identifier column, plus columns for junction and optionally the V and J genes.
 #' @param id_col number or name of the column containing the identifiers
 #' @param junction_col nmber or name of the column containing the TCR junctions
