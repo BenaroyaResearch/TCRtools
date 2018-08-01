@@ -4,7 +4,13 @@
 \alias{write_TCR_junction_fasta}
 \title{Write out TCR junction sequences to a FASTA file for BLAST query}
 \usage{
-\code{write_TCR_junction_fasta(tcrs, filename, pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF")}
+\code{
+write_TCR_junction_fasta(
+  tcrs, filename="tcr_junctions.fasta",
+  pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
+  cols_for_name=c("sample", "cln_count", "v_gene", "j_gene", "junction"),
+  junction_col="junction",
+  unique_only=TRUE)}
 }
 \arguments{
 \item{tcrs}{data frame, the TCrs to be included. Must include all the columns specified in \code{cols_for_name} and \code{junction_col}.}

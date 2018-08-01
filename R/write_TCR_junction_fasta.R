@@ -9,7 +9,13 @@
 #' @param junction_col character string, the name of the column in \code{tcrs} to use for the CDR3 junction sequence. Must be included in \code{tcrs}.
 #' @param unique_only logical, whether to include only unique combinations of \code{cols_for_name} in the output.
 #' @export
-#' @usage \code{write_TCR_junction_fasta(tcrs, filename, pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF")}
+#' @usage \code{
+#' write_TCR_junction_fasta(
+#'   tcrs, filename="tcr_junctions.fasta",
+#'   pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
+#'   cols_for_name=c("sample", "cln_count", "v_gene", "j_gene", "junction"),
+#'   junction_col="junction",
+#'   unique_only=TRUE)}
 write_TCR_junction_fasta <-
   function(tcrs, filename="tcr_junctions.fasta",
            pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
@@ -33,10 +39,10 @@ write_TCR_junction_fasta <-
     tcrs <- tcrs[,union(cols_for_name, junction_col)]
     if (unique_only) tcrs <- tcrs[!duplicated(tcrs[,cols_for_name]),]
       
-  sink(filename)
-  cat(str_replace(pos_control, " ", "\n"), "\n", sep="")
+  sink(filename); on.exit(sink())
+  cat(stringr::str_replace(pos_control, " ", "\n"), "\n", sep="")
   for (i in 1:nrow(tcrs))
     cat(">", paste(tcrs[i,cols_for_name], collapse="_"), "\n",
         tcrs[i,junction_col], "\n", sep="")
-  sink()
+  
 }
