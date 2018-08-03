@@ -8,8 +8,7 @@
 #' @export
 #' @return A data frame containing the two TCR identifiers and the number of chains shared between them.
 #' 
-#' @usage \code{
-#' tabulate_shared_TCR_chains(
+#' @usage \code{tabulate_shared_TCR_chains(
 #'      tcr_chain_matches,
 #'      tcr1_col="tcr1", tcr2_col="tcr2")}
 tabulate_shared_TCR_chains <-

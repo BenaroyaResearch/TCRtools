@@ -40,9 +40,9 @@ write_TCR_junction_fasta <-
     if (unique_only) tcrs <- tcrs[!duplicated(tcrs[,cols_for_name]),]
       
   sink(filename); on.exit(sink())
-  cat(stringr::str_replace(pos_control, " ", "\n"), "\n", sep="")
+  cat(stringr::str_replace(pos_control, " ", "\r\n"), "\r\n", sep="")
   for (i in 1:nrow(tcrs))
-    cat(">", paste(tcrs[i,cols_for_name], collapse="_"), "\n",
-        tcrs[i,junction_col], "\n", sep="")
+    cat(">", paste(tcrs[i,cols_for_name], collapse="_"), "\r\n",
+        tcrs[i,junction_col], "\r\n", sep="")
   
 }

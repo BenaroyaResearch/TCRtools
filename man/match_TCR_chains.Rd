@@ -4,8 +4,7 @@
 \alias{match_TCR_chains}
 \title{Match the TCR junctions and (optionally) V and J genes between single-cell libraries}
 \usage{
-\code{
-match_TCR_chains(
+\code{match_TCR_chains(
      tcrs,
      id_col="libid",
      junction_col="junction"
@@ -17,16 +16,19 @@ match_TCR_chains(
 
 \item{id_col}{number or name of the column containing the identifiers}
 
-\item{junction_col}{nmber or name of the column containing the TCR junctions}
+\item{junction_col}{number or name of the column containing the TCR junctions}
 
 \item{match_V_gene, match_J_gene}{logical, whether to include the V/J genes when matching TCR chains. Default to TRUE. If set to FALSE, the V/J gene identities are ignored when matching chains.}
 
-\item{V_gene_col, J_gene_col}{nmber or name of the columns containing the V and J genes. Ignored if match_V_gene and/or match_J_gene are set to FALSE.}
+\item{V_gene_col, J_gene_col}{number or name of the columns containing the V and J genes. Ignored if match_V_gene and/or match_J_gene are set to FALSE.}
 }
 \value{
-A data frame containing the TCR chain information (junction and optionally V and J genes) and the identifiers for the two cells with matching chains. Identifier column names in the returned data frame are "tcr1" and "tcr2".
+A data frame containing the TCR chain information (junction and
+optionally V and J genes) and the identifiers for the two cells with matching chains.
+Identifier column names in the returned data frame are "tcr1" and "tcr2".
 }
 \description{
-Determine matching TCR chain sequences among a set of single-cell TCR sequences. By default, chains
-are matched by the junction, V gene, and J gene. Matching by V and/or J genes can be disabled.
+Determine matching TCR chain sequences among a set of single-cell TCR sequences.
+By default, chains are matched by the junction, V gene, and J gene. Matching by
+V and/or J genes can be disabled.
 }

@@ -4,8 +4,7 @@
 \alias{tabulate_shared_TCR_chains}
 \title{Tabulate the shared TCRs chains in pairs of single-cell libraries}
 \usage{
-\code{
-tabulate_shared_TCR_chains(
+\code{tabulate_shared_TCR_chains(
      tcr_chain_matches,
      tcr1_col="tcr1", tcr2_col="tcr2")}
 }
