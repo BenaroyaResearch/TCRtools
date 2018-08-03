@@ -23,6 +23,9 @@ write_TCR_junction_fasta <-
            junction_col="junction",
            unique_only=TRUE) {
     
+    if (!is.data.frame(tcrs)) stop("Input tcrs object must be a data frame")
+    tcrs <- as.data.frame(tcrs)
+    
     # check for junction_col in tcrs object
     if (!(junction_col %in% colnames(tcrs))) {
       stop("Junction column '", junction_col, "' not found in tcrs object.")
