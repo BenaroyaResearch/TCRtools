@@ -6,7 +6,7 @@
 #' 
 #' @param filename character string, the path and file name to read.
 #' @param identity_threshold numeric, the threshold for \% identity match between the query and the subject sequences. Defaults to 100, can be reduced to allow less strict matching.
-#' @param length_threshold numeric, the threshold for \% of the total length of the query sequence that must be found in the alignment. Defaults to 100, can be reduced to allow less strict matching.
+#' @param length_threshold numeric, the threshold for \% of the total length of the query sequence that must be found in the alignment. Defaults to 100, can be reduced to allow less strict matching. Setting to 0 or NULL results in no thresholding.
 #' @param query_seq_in_name logical, whether the alignment query sequence is included in the fasta query name. Alignment length thresholding requires the query sequence, which is assumed to be at the end of the query name.
 #' @export
 #' @return a data frame containing the alignment hits, optionally filtered by identity and length thresholds
@@ -31,14 +31,23 @@ read_BLAST_TCR_align_hits <-
       hits[hits[,"perc_identity"] >= identity_threshold,]
     
     # make alignment length threshold cut
-    if (query_seq_in_name) {
+    if (is.null(length_threshold)) length_threshold <- 0
+    if (query_seq_in_name & (length_threshold > 0)) {
+      query_seqs <- str_extract(hits[,"query_acc_ver"], "[A-Z]+$")
+      if (any(is.na(query_seqs))) {
+        warning(
+          "Query sequence was not found in some query names; dropping ",
+          sum(is.na(query_seqs)), " sequences from results. Consider checking names for query sequence inclusion ",
+          "or setting length_threshold to NULL")
+        hits <- hits[!is.na(query_seqs),]
+      }
       hits[,"query_sequence"] <-
-        str_extract(hits[,"query_acc_ver"], "[A-Z]+$")
+        na.omit(query_seqs)
       hits <- 
         hits[
           with(hits,
                (alignment_length / nchar(query_sequence) * 100) >= length_threshold),]
-    } else {
+    } else if (!query_seq_in_name) {
       warning("Cannot apply alignment length thresholding without query sequence.")
     }
     

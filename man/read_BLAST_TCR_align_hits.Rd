@@ -14,7 +14,7 @@
 
 \item{identity_threshold}{numeric, the threshold for \% identity match between the query and the subject sequences. Defaults to 100, can be reduced to allow less strict matching.}
 
-\item{length_threshold}{numeric, the threshold for \% of the total length of the query sequence that must be found in the alignment. Defaults to 100, can be reduced to allow less strict matching.}
+\item{length_threshold}{numeric, the threshold for \% of the total length of the query sequence that must be found in the alignment. Defaults to 100, can be reduced to allow less strict matching. Setting to 0 or NULL results in no thresholding.}
 
 \item{query_seq_in_name}{logical, whether the alignment query sequence is included in the fasta query name. Alignment length thresholding requires the query sequence, which is assumed to be at the end of the query name.}
 }
