@@ -5,6 +5,7 @@
 #' @param tcrs data frame, the TCrs to be included. Must include all the columns specified in \code{cols_for_name} and \code{junction_col}.
 #' @param filename character string, the path and file name to output. Defaults to "tcr_junctions.fasta"
 #' @param pos_control character string containing a positive control TCR sequence that will be prepended to the fasta file. Used to ensure that BLAST search parameters are working properly. Can be set to NULL to not include positive control.
+#' @param sample_col character, the name of the column in \code{tcrs} to be included in the fasta query name. Separate from \code{cols_for_name} to enable easier editing.
 #' @param cols_for_name character vector, the columns in \code{tcrs} to be included in the fasta query name. Values will be concatenated with "_" as separator to generate the query name. To use alignment results with \code{read_BLAST_TCR_align_hits} with length thresholding, include the junction at the end of the query name.
 #' @param junction_col character string, the name of the column in \code{tcrs} to use for the CDR3 junction sequence. Must be included in \code{tcrs}.
 #' @param unique_only logical, whether to include only unique combinations of \code{cols_for_name} in the output.
@@ -19,7 +20,8 @@
 write_TCR_junction_fasta <-
   function(tcrs, filename="tcr_junctions.fasta",
            pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
-           cols_for_name=c("sample", "cln_count", "v_gene", "j_gene", "junction"),
+           sample_col="libid",
+           cols_for_name=c(sample_col, "cln_count", "v_gene", "j_gene", "junction"),
            junction_col="junction",
            unique_only=TRUE) {
     

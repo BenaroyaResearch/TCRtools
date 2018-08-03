@@ -19,6 +19,8 @@ write_TCR_junction_fasta(
 
 \item{pos_control}{character string containing a positive control TCR sequence that will be prepended to the fasta file. Used to ensure that BLAST search parameters are working properly. Can be set to NULL to not include positive control.}
 
+\item{sample_col}{character, the name of the column in \code{tcrs} to be included in the fasta query name. Separate from \code{cols_for_name} to enable easier editing.}
+
 \item{cols_for_name}{character vector, the columns in \code{tcrs} to be included in the fasta query name. Values will be concatenated with "_" as separator to generate the query name. To use alignment results with \code{read_BLAST_TCR_align_hits} with length thresholding, include the junction at the end of the query name.}
 
 \item{junction_col}{character string, the name of the column in \code{tcrs} to use for the CDR3 junction sequence. Must be included in \code{tcrs}.}
