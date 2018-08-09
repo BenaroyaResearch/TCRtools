@@ -27,6 +27,10 @@ plot_TCR_circos <-
     link_colors=NULL, link_width=NULL,
     filename=NULL, plottype="pdf", plotdims=c(12,12)) {
     
+    if (!requireNamespace("circlize", quietly = TRUE))
+      stop("Package \"circlize\" needed for this function to work. Please install it.",
+           call. = FALSE)
+    
     if (!is.null(filename)) plottype <- match.arg(plottype, choices=c("pdf", "png"))
     
     # define limits for plotting
@@ -34,7 +38,7 @@ plot_TCR_circos <-
     tcr_cells$xmin <- 0
     tcr_cells$xmax = n_cells
     
-    #add sum values to tcr_cells, marking the x-position of the first links out (sum1) and in (sum2). Updated for further links in loop below.
+    # add sum values to tcr_cells, marking the x-position of the first links out (sum1) and in (sum2). Updated for further links in loop below.
     tcr_cells$sum <- length(unique(tcr_links$tcr1))
     
     
@@ -47,14 +51,14 @@ plot_TCR_circos <-
     } else dev.new(width=plotdims[1], height=plotdims[2])  ### open plotting window
     
     par(mar=rep(0,4))
-    circos.clear()
+    circlize::circos.clear()
     
     # basic circos graphic parameters
-    circos.par(
+    circlize::circos.par(
       cell.padding=c(0,0,0,0), track.margin=c(0,0.15), start.degree = 90, gap.degree = 0)
     
     # sector details
-    circos.initialize(factors = tcr_cells$tcr1, xlim = cbind(tcr_cells$xmin, tcr_cells$xmax))
+    circlize::circos.initialize(factors = tcr_cells$tcr1, xlim = cbind(tcr_cells$xmin, tcr_cells$xmax))
     
     if (is.null(ring_colors)) {
       ring_colors <- "default"
@@ -62,32 +66,32 @@ plot_TCR_circos <-
     }
       
     # plot sectors
-    circos.trackPlotRegion(
+    circlize::circos.trackPlotRegion(
       ylim = c(0, 1), factors = tcr_cells$tcr1, track.height=0.1,
       #panel.fun for each sector
       panel.fun = function(x, y) {
         #select details of current sector
-        name = get.cell.meta.data("sector.index")
-        i = get.cell.meta.data("sector.numeric.index")
-        xlim = get.cell.meta.data("xlim")
-        ylim = get.cell.meta.data("ylim")
+        name = circlize::get.cell.meta.data("sector.index")
+        i = circlize::get.cell.meta.data("sector.numeric.index")
+        xlim = circlize::get.cell.meta.data("xlim")
+        ylim = circlize::get.cell.meta.data("ylim")
         
         if (length(ring_colors)==1) {
           # single loop
-          circos.rect(
+          circlize::circos.rect(
             xleft=xlim[1], ybottom=ylim[1],
             xright=xlim[2], ytop=ylim[2],
             col = tcr_cells[i, ring_colors], border = tcr_cells[i, ring_colors])
         } else if (length(ring_colors)==2) {
           
           # colors for inner loop
-          circos.rect(
+          circlize::circos.rect(
             xleft=xlim[1], ybottom=ylim[1],
             xright=xlim[2], ytop=ylim[2]-0.5,
             col = tcr_cells[i, ring_colors[1]], border = tcr_cells[i, ring_colors[1]])
           
           # colors for outer loop
-          circos.rect(
+          circlize::circos.rect(
             xleft=xlim[1], ybottom=ylim[1]+0.5,
             xright=xlim[2], ytop=ylim[2],
             col = tcr_cells[i, ring_colors[2]], border = tcr_cells[i, ring_colors[2]])
@@ -100,7 +104,7 @@ plot_TCR_circos <-
         #circos.rect(xleft=xlim[1], ybottom=0.3, xright=xlim[2], ytop=0.32, col = "white", border = "white")
         
         #plot axis
-        circos.axis(
+        circlize::circos.axis(
           labels.cex=0.00000001, major.at=seq(from=0,to=floor(tcr_cells$xmax)[i],by=500), 
           labels.away.percentage = 0.15)
       })
@@ -122,7 +126,7 @@ plot_TCR_circos <-
       j <- match(tcr_links$tcr2[k], tcr_cells$tcr1)
       
       # draw links, colored by selected variable
-      circos.link(
+      circlize::circos.link(
         sector.index1=tcr_cells$tcr1[i], point1=c(tcr_cells$sum[i]),
         sector.index2=tcr_cells$tcr1[j], point2=c(tcr_cells$sum[j]),
         col = tcr_cells[i, link_colors], rou1=0.75, rou2=0.75,
