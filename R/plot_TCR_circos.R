@@ -129,7 +129,7 @@ plot_TCR_circos <-
       circlize::circos.link(
         sector.index1=tcr_cells$tcr1[i], point1=c(tcr_cells$sum[i]),
         sector.index2=tcr_cells$tcr1[j], point2=c(tcr_cells$sum[j]),
-        col = tcr_cells[i, link_colors], rou1=0.75, rou2=0.75,
+        col = tcr_links[k, link_colors], rou1=0.75, rou2=0.75,
         lwd = tcr_links[k, link_width]*1.5)
     }
   }
