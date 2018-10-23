@@ -4,8 +4,8 @@
 #' purpose is to show clonotype sharing among cells within and between samples. Samples can optionally
 #' be colored by grouping variables.
 #' 
-#' @param tcr_cells data frame containing information at the cell level. Should include identifiers at minimum, plus optional columns for coloring the cells around the circos plot. Cells will be plotted in the order in which they are listed in this data frame.
-#' @param tcr_links data frame with links to draw between cells. Should include identifiers for the two cells, plus optional columns for color and/or width of the links to be drawn. Often the output of \code{tabulate_shared_TCR_chains}.
+#' @param tcr_cells data frame containing information at the cell level. Should include identifiers at minimum, as column "tcr1", plus optional columns for coloring the cells around the circos plot. Cells will be plotted in the order in which they are listed in this data frame.
+#' @param tcr_links data frame with links to draw between cells. Should include identifiers for the two cells, as columns "tcr1" and "tcr2", plus optional columns for color and/or width of the links to be drawn. Often the output of \code{tabulate_shared_TCR_chains}.
 #' @param ring_colors optional vector with number(s) or name(s) of the columns in \code{tcr_cells} to use for the colors of the ring. Current version can include up to 2 colors: list the inner ring first, outer ring second. 
 #' @param link_colors optional number or name of the column in \code{tcr_links} to use for the colors of the links. Defaults to NULL, which yields black.
 #' @param link_width optional number or name of the column in \code{tcr_links} to use for scaling the width of the links. Defaults to NULL, which results in all links having the same width.
@@ -27,6 +27,12 @@ plot_TCR_circos <-
     link_colors=NULL, link_width=NULL,
     filename=NULL, plottype="pdf", plotdims=c(12,12)) {
     
+    checkmate::assert(
+      checkmate::check_data_frame(tcr_cells),
+      checkmate::check_data_frame(tcr_links),
+      checkmate::check_numeric(plotdims, lower=0, len=2)
+      )
+    
     if (!requireNamespace("circlize", quietly = TRUE))
       stop("Package \"circlize\" needed for this function to work. Please install it.",
            call. = FALSE)
@@ -40,7 +46,6 @@ plot_TCR_circos <-
     
     # add sum values to tcr_cells, marking the x-position of the first links out (sum1) and in (sum2). Updated for further links in loop below.
     tcr_cells$sum <- length(unique(tcr_links$tcr1))
-    
     
     if (!is.null(filename)) {
       if (plottype == "pdf") {
@@ -58,12 +63,14 @@ plot_TCR_circos <-
       cell.padding=c(0,0,0,0), track.margin=c(0,0.15), start.degree = 90, gap.degree = 0)
     
     # sector details
-    circlize::circos.initialize(factors = tcr_cells$tcr1, xlim = cbind(tcr_cells$xmin, tcr_cells$xmax))
+    circlize::circos.initialize(
+      factors = tcr_cells$tcr1, xlim = cbind(tcr_cells$xmin, tcr_cells$xmax))
     
     if (is.null(ring_colors)) {
       ring_colors <- "default"
-      tcr_cells[,ring_colors] <- "black"
+      tcr_cells[, ring_colors] <- "black"
     }
+    checkmate::assert_character(tcr_cells[, ring_colors, drop=TRUE])
       
     # plot sectors
     circlize::circos.trackPlotRegion(
@@ -81,20 +88,23 @@ plot_TCR_circos <-
           circlize::circos.rect(
             xleft=xlim[1], ybottom=ylim[1],
             xright=xlim[2], ytop=ylim[2],
-            col = tcr_cells[i, ring_colors], border = tcr_cells[i, ring_colors])
+            col = tcr_cells[i, ring_colors, drop=TRUE],
+            border = tcr_cells[i, ring_colors, drop=TRUE])
         } else if (length(ring_colors)==2) {
           
           # colors for inner loop
           circlize::circos.rect(
             xleft=xlim[1], ybottom=ylim[1],
             xright=xlim[2], ytop=ylim[2]-0.5,
-            col = tcr_cells[i, ring_colors[1]], border = tcr_cells[i, ring_colors[1]])
+            col = tcr_cells[i, ring_colors[1], drop=TRUE],
+            border = tcr_cells[i, ring_colors[1], drop=TRUE])
           
           # colors for outer loop
           circlize::circos.rect(
             xleft=xlim[1], ybottom=ylim[1]+0.5,
             xright=xlim[2], ytop=ylim[2],
-            col = tcr_cells[i, ring_colors[2]], border = tcr_cells[i, ring_colors[2]])
+            col = tcr_cells[i, ring_colors[2], drop=TRUE],
+            border = tcr_cells[i, ring_colors[2], drop=TRUE])
         } else stop("Plotting with more than 2 loop colors is not currently supported.")
         
         # blank in part of main sector
@@ -114,11 +124,14 @@ plot_TCR_circos <-
       link_colors <- "default"
       tcr_links[,link_colors] <- "black"
     }
+    checkmate::assert_character(tcr_links[, link_colors, drop=TRUE])
     
     if (is.null(link_width)) {
       link_width <- "default"
       tcr_links[,link_width] <- 1
     }
+    checkmate::assert_numeric(tcr_links[, link_width, drop=TRUE])
+    
     for(k in 1:nrow(tcr_links)){
       # for(k in 1){
       # determine row of tcr_cells to use for coloring
@@ -129,7 +142,7 @@ plot_TCR_circos <-
       circlize::circos.link(
         sector.index1=tcr_cells$tcr1[i], point1=c(tcr_cells$sum[i]),
         sector.index2=tcr_cells$tcr1[j], point2=c(tcr_cells$sum[j]),
-        col = tcr_links[k, link_colors], rou1=0.75, rou2=0.75,
-        lwd = tcr_links[k, link_width]*1.5)
+        col = tcr_links[k, link_colors, drop=TRUE], rou1=0.75, rou2=0.75,
+        lwd = tcr_links[k, link_width, drop=TRUE]*1.5)
     }
   }

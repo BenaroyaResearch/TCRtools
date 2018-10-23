@@ -26,6 +26,7 @@ match_TCR_chains <-
            junction_col="junction",
            match_V_gene=TRUE, match_J_gene=TRUE,
            V_gene_col="v_gene", J_gene_col="j_gene") {
+    checkmate::assert_data_frame(tcrs)
     
     # convert numeric column identifiers to column names
     for (i in c("id_col", "junction_col", "V_gene_col", "J_gene_col"))
@@ -47,7 +48,8 @@ match_TCR_chains <-
     
     # remove self-matches
     tcrs.match <-
-      tcrs.match[tcrs.match[,paste0(id_col, ".x")] != tcrs.match[,paste0(id_col, ".y")],]
+      tcrs.match[tcrs.match[, paste0(id_col, ".x"), drop=TRUE] !=
+                   tcrs.match[, paste0(id_col, ".y"), drop=TRUE],]
     
     # rename identifer columns
     colnames(tcrs.match)[colnames(tcrs.match)==paste0(id_col, ".x")] <- "tcr1"

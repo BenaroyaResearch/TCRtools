@@ -14,6 +14,9 @@
 tabulate_shared_TCR_chains <-
   function(tcr_chain_matches,
            tcr1_col="tcr1", tcr2_col="tcr2") {
+    assert(
+      check_data_frame(tcr_chain_matches)
+    )
     
     # convert numeric column identifiers to column names
     for (i in c("tcr1_col", "tcr2_col"))
