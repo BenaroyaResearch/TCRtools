@@ -7,7 +7,7 @@ Imports:
 	stringr
 Suggests:
 	circlize
-Depends: R (>= 3.4.3)
+Depends: R (>= 3.2.2)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
