@@ -70,7 +70,9 @@ plot_TCR_circos <-
       ring_colors <- "default"
       tcr_cells[, ring_colors] <- "black"
     }
-    checkmate::assert_character(tcr_cells[, ring_colors, drop=TRUE])
+    checkmate::assert_data_frame(
+      tcr_cells[, ring_colors, drop=FALSE],
+      types="character")
       
     # plot sectors
     circlize::circos.trackPlotRegion(
