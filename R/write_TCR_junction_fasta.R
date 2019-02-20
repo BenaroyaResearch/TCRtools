@@ -10,13 +10,14 @@
 #' @param junction_col character string, the name of the column in \code{tcrs} to use for the CDR3 junction sequence. Must be included in \code{tcrs}.
 #' @param unique_only logical, whether to include only unique combinations of \code{cols_for_name} in the output.
 #' @export
-#' @usage \code{
+#' @usage
 #' write_TCR_junction_fasta(
 #'   tcrs, filename="tcr_junctions.fasta",
 #'   pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
-#'   cols_for_name=c("sample", "cln_count", "v_gene", "j_gene", "junction"),
+#'   sample_col="libid",
+#'   cols_for_name=c(sample_col, "cln_count", "v_gene", "j_gene", "junction"),
 #'   junction_col="junction",
-#'   unique_only=TRUE)}
+#'   unique_only=TRUE)
 write_TCR_junction_fasta <-
   function(tcrs, filename="tcr_junctions.fasta",
            pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
@@ -24,10 +25,10 @@ write_TCR_junction_fasta <-
            cols_for_name=c(sample_col, "cln_count", "v_gene", "j_gene", "junction"),
            junction_col="junction",
            unique_only=TRUE) {
-    
+
     if (!is.data.frame(tcrs)) stop("Input tcrs object must be a data frame")
     tcrs <- as.data.frame(tcrs)
-    
+
     # check for junction_col in tcrs object
     if (!(junction_col %in% colnames(tcrs))) {
       stop("Junction column '", junction_col, "' not found in tcrs object.")
@@ -40,14 +41,14 @@ write_TCR_junction_fasta <-
         paste(cols_for_name[!(cols_for_name %in% colnames(tcrs))]))
       cols_for_name <- cols_for_name[cols_for_name %in% colnames(tcrs)]
     }
-    
+
     tcrs <- tcrs[,union(cols_for_name, junction_col)]
     if (unique_only) tcrs <- tcrs[!duplicated(tcrs[,cols_for_name]),]
-      
+
   sink(filename); on.exit(sink())
   cat(stringr::str_replace(pos_control, " ", "\r\n"), "\r\n", sep="")
   for (i in 1:nrow(tcrs))
     cat(">", paste(tcrs[i,cols_for_name], collapse="_"), "\r\n",
         tcrs[i,junction_col], "\r\n", sep="")
-  
+
 }

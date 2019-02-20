@@ -4,9 +4,9 @@
 \alias{tabulate_shared_TCR_chains}
 \title{Tabulate the shared TCRs chains in pairs of single-cell libraries}
 \usage{
-\code{tabulate_shared_TCR_chains(
+tabulate_shared_TCR_chains(
      tcr_chain_matches,
-     tcr1_col="tcr1", tcr2_col="tcr2")}
+     tcr1_col="tcr1", tcr2_col="tcr2")
 }
 \arguments{
 \item{tcr_chain_matches}{a data frame containing the TCR chain matches. Should contain, at minimum, the identifiers for the two TCRs. Often the output of \code{match_TCR_chains}.}
