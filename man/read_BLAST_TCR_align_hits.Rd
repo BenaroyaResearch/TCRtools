@@ -4,10 +4,9 @@
 \alias{read_BLAST_TCR_align_hits}
 \title{Read the alignment output hit table .txt file from a TCR sequence BLAST query}
 \usage{
-\code{
-  read_BLAST_TCR_align_hits(
+read_BLAST_TCR_align_hits(
     filename, identity_threshold=100, length_threshold=100,
-    query_seq_in_name=TRUE)}
+    query_seq_in_name=TRUE)
 }
 \arguments{
 \item{filename}{character string, the path and file name to read.}
