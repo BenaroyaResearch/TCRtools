@@ -28,12 +28,17 @@ plot_TCR_circos <-
     ring_colors=NULL,
     link_colors=NULL, link_width=NULL,
     filename=NULL, plottype="pdf", plotdims=c(12,12)) {
-
+    
+    check_unique_tcr1 <-
+      function(x) if (any(duplicated(x$tcr1)))
+        "Column 'tcr1' must not contain duplicate values" else TRUE
+    
     checkmate::assert(
       checkmate::check_data_frame(tcr_cells),
       checkmate::check_data_frame(tcr_links),
-      checkmate::check_numeric(plotdims, lower=0, len=2)
-      )
+      checkmate::check_numeric(plotdims, lower=0, len=2),
+      check_unique_tcr1(tcr_cells),
+      combine="and")
 
     if (!requireNamespace("circlize", quietly = TRUE))
       stop("Package \"circlize\" needed for this function to work. Please install it.",
