@@ -17,7 +17,7 @@ write_TCR_junction_fasta(
 
 \item{filename}{character string, the path and file name to output. Defaults to "tcr_junctions.fasta"}
 
-\item{pos_control}{character string containing a positive control TCR sequence that will be prepended to the fasta file. Used to ensure that BLAST search parameters are working properly. Can be set to NULL to not include positive control.}
+\item{pos_control}{character string containing a positive control TCR sequence that will be prepended to the fasta file. Used to ensure that BLAST search parameters are working properly. Can be set to NULL to not include positive control. The default value should give a perfect match to protein accession 1OGA_D.}
 
 \item{sample_col}{character, the name of the column in \code{tcrs} to be included in the fasta query name. Separate from \code{cols_for_name} to enable easier editing.}
 
@@ -30,4 +30,12 @@ write_TCR_junction_fasta(
 \description{
 Write out TCR junctions to a FASTA file, to enable submission for BLAST query against known
 protein sequences. This allows identification of known TCRs from published sequences.
+}
+\details{
+This function outputs a file designed to be used for a BLAST query on
+https://blast.ncbi.nlmh.nih.gov. On that site, use protein blast (blastp), under "Choose File",
+upload the file that is output by this function. Make sure that the non-redundant protein sequences
+database (nr) is selected, set organism to "Homo sapiens (taxid:9606)", and under Algorith parameters
+set Expect threshold to 1000 (to account for the length of the sequences being queried). If you
+included the default pos_control, you should see it match to protein accession 1OGA_D.
 }

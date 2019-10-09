@@ -1,6 +1,6 @@
 Package: TCRtools
 Title: Helper functions for analyzing TCR sequence data from single-cell RNA-seq
-Version: 0.0.0.9002
+Version: 0.0.0.9003
 Authors@R: person("Matthew", "Dufort", email = "matt.dufort@gmail.com", role = c("aut", "cre"))
 Description: This package includes a number of functions for manipulating and/or analyzing TCR sequences from single-cell RNA-seq data. It is a work in progress, with new functions being added regularly to expand functionality and simplify existing processes.
 Imports:
