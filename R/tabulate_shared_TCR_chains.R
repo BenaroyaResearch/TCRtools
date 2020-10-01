@@ -21,24 +21,31 @@ tabulate_shared_TCR_chains <-
       checkmate::check_data_frame(tcr_chain_matches)
     )
 
-    # convert numeric column identifiers to column names
-    for (i in c("tcr1_col", "tcr2_col"))
-      if (is.numeric(get(i))) assign(i, colnames(tcrs)[get(i)])
+    if (nrow(tcr_chain_matches) == 0) {
+      tcr_chains_shared <-
+        cbind(
+          tcr_chain_matches[, c(tcr1_col, tcr2_col)],
+          "num_shared_chains" = integer())
+    } else {
+      # convert numeric column identifiers to column names
+      for (i in c("tcr1_col", "tcr2_col"))
+        if (is.numeric(get(i))) assign(i, colnames(tcrs)[get(i)])
 
-    # extract all the matches
-    tcr_chains_shared <-
-      aggregate(
-        list(num_shared_chains=rep(1, nrow(tcr_chain_matches))),
-        tcr_chain_matches[,c(tcr1_col, tcr2_col)], length)
+      # extract all the matches
+      tcr_chains_shared <-
+        aggregate(
+          list(num_shared_chains=rep(1, nrow(tcr_chain_matches))),
+          tcr_chain_matches[,c(tcr1_col, tcr2_col)], length)
 
-    # make the order consistent, and drop the duplicates
-    for (i in 1:nrow(tcr_chains_shared)) {
-      tcr_chains_shared[i, c(tcr1_col, tcr2_col)] <-
-        tcr_chains_shared[i, c(tcr1_col, tcr2_col)] %>%
-        unlist() %>%
-        sort()
+      # make the order consistent, and drop the duplicates
+      for (i in 1:nrow(tcr_chains_shared)) {
+        tcr_chains_shared[i, c(tcr1_col, tcr2_col)] <-
+          tcr_chains_shared[i, c(tcr1_col, tcr2_col)] %>%
+          unlist() %>%
+          sort()
+      }
+      tcr_chains_shared <- unique(tcr_chains_shared)
     }
-    tcr_chains_shared <- unique(tcr_chains_shared)
 
     tcr_chains_shared
   }

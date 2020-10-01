@@ -5,7 +5,7 @@
 #' be colored by grouping variables.
 #'
 #' @param tcr_cells data frame containing information at the cell level. Should include identifiers at minimum, as column "tcr1", plus optional columns for coloring the cells around the circos plot. Cells will be plotted in the order in which they are listed in this data frame.
-#' @param tcr_links data frame with links to draw between cells. Should include identifiers for the two cells, as columns "tcr1" and "tcr2", plus optional columns for color and/or width of the links to be drawn. Often the output of \code{tabulate_shared_TCR_chains}.
+#' @param tcr_links data frame with links to draw between cells. Should include identifiers for the two cells, as columns "tcr1" and "tcr2", plus optional columns for color and/or width of the links to be drawn. Often the output of \code{tabulate_shared_TCR_chains}. If an empty data frame, or set to \code{NULL}, no links will be drawn.
 #' @param ring_colors optional vector with number(s) or name(s) of the columns in \code{tcr_cells} to use for the colors of the ring. Current version can include up to 2 colors: list the inner ring first, outer ring second.
 #' @param link_colors optional number or name of the column in \code{tcr_links} to use for the colors of the links. Defaults to NULL, which yields black.
 #' @param link_width optional number or name of the column in \code{tcr_links} to use for scaling the width of the links. Defaults to NULL, which results in all links having the same width.
@@ -28,14 +28,13 @@ plot_TCR_circos <-
     ring_colors=NULL,
     link_colors=NULL, link_width=NULL,
     filename=NULL, plottype="pdf", plotdims=c(12,12)) {
-    
+
     check_unique_tcr1 <-
       function(x) if (any(duplicated(x$tcr1)))
         "Column 'tcr1' must not contain duplicate values" else TRUE
-    
+
     checkmate::assert(
       checkmate::check_data_frame(tcr_cells),
-      checkmate::check_data_frame(tcr_links),
       checkmate::check_numeric(plotdims, lower=0, len=2),
       check_unique_tcr1(tcr_cells),
       combine="and")
@@ -51,8 +50,6 @@ plot_TCR_circos <-
     tcr_cells$xmin <- 0
     tcr_cells$xmax = n_cells
 
-    # add sum values to tcr_cells, marking the x-position of the first links out (sum1) and in (sum2). Updated for further links in loop below.
-    tcr_cells$sum <- length(unique(tcr_links$tcr1))
 
     if (!is.null(filename)) {
       if (plottype == "pdf") {
@@ -130,29 +127,40 @@ plot_TCR_circos <-
       })
 
     ### plot links
-    if (is.null(link_colors)) {
-      link_colors <- "default"
-      tcr_links[,link_colors] <- "black"
-    }
-    checkmate::assert_character(tcr_links[, link_colors, drop=TRUE])
+    if (!is.null(tcr_links)) {
+      checkmate::assert(
+        checkmate::check_data_frame(tcr_links))
 
-    if (is.null(link_width)) {
-      link_width <- "default"
-      tcr_links[,link_width] <- 1
-    }
-    checkmate::assert_numeric(tcr_links[, link_width, drop=TRUE])
+      if (nrow(tcr_links) > 0) {
 
-    for(k in 1:nrow(tcr_links)){
-      # for(k in 1){
-      # determine row of tcr_cells to use for coloring
-      i <- match(tcr_links$tcr1[k], tcr_cells$tcr1)
-      j <- match(tcr_links$tcr2[k], tcr_cells$tcr1)
+        # add sum values to tcr_cells, marking the x-position of the first links out (sum1) and in (sum2). Updated for further links in loop below.
+        tcr_cells$sum <- length(unique(tcr_links$tcr1))
 
-      # draw links, colored by selected variable
-      circlize::circos.link(
-        sector.index1=tcr_cells$tcr1[i], point1=c(tcr_cells$sum[i]),
-        sector.index2=tcr_cells$tcr1[j], point2=c(tcr_cells$sum[j]),
-        col = tcr_links[k, link_colors, drop=TRUE], rou1=0.75, rou2=0.75,
-        lwd = tcr_links[k, link_width, drop=TRUE]*1.5)
+        if (is.null(link_colors)) {
+          link_colors <- "default"
+          tcr_links[,link_colors] <- "black"
+        }
+        checkmate::assert_character(tcr_links[, link_colors, drop=TRUE])
+
+        if (is.null(link_width)) {
+          link_width <- "default"
+          tcr_links[,link_width] <- 1
+        }
+        checkmate::assert_numeric(tcr_links[, link_width, drop=TRUE])
+
+        for (k in 1:nrow(tcr_links)) {
+          # for(k in 1){
+          # determine row of tcr_cells to use for coloring
+          i <- match(tcr_links$tcr1[k], tcr_cells$tcr1)
+          j <- match(tcr_links$tcr2[k], tcr_cells$tcr1)
+
+          # draw links, colored by selected variable
+          circlize::circos.link(
+            sector.index1=tcr_cells$tcr1[i], point1=c(tcr_cells$sum[i]),
+            sector.index2=tcr_cells$tcr1[j], point2=c(tcr_cells$sum[j]),
+            col = tcr_links[k, link_colors, drop=TRUE], rou1=0.75, rou2=0.75,
+            lwd = tcr_links[k, link_width, drop=TRUE]*1.5)
+        }
+      }
     }
   }

@@ -13,7 +13,7 @@ plot_TCR_circos(
 \arguments{
 \item{tcr_cells}{data frame containing information at the cell level. Should include identifiers at minimum, as column "tcr1", plus optional columns for coloring the cells around the circos plot. Cells will be plotted in the order in which they are listed in this data frame.}
 
-\item{tcr_links}{data frame with links to draw between cells. Should include identifiers for the two cells, as columns "tcr1" and "tcr2", plus optional columns for color and/or width of the links to be drawn. Often the output of \code{tabulate_shared_TCR_chains}.}
+\item{tcr_links}{data frame with links to draw between cells. Should include identifiers for the two cells, as columns "tcr1" and "tcr2", plus optional columns for color and/or width of the links to be drawn. Often the output of \code{tabulate_shared_TCR_chains}. If an empty data frame, or set to \code{NULL}, no links will be drawn.}
 
 \item{ring_colors}{optional vector with number(s) or name(s) of the columns in \code{tcr_cells} to use for the colors of the ring. Current version can include up to 2 colors: list the inner ring first, outer ring second.}
 
