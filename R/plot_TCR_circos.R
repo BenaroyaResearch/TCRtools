@@ -122,8 +122,8 @@ plot_TCR_circos <-
 
         #plot axis
         circlize::circos.axis(
-          labels.cex=0.00000001, major.at=seq(from=0,to=floor(tcr_cells$xmax)[i],by=500),
-          labels.away.percentage = 0.15)
+          labels.cex=0.00000001, major.at=seq(from=0,to=floor(tcr_cells$xmax)[i],by=500)
+          )
       })
 
     ### plot links
