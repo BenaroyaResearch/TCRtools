@@ -6,9 +6,9 @@
 \usage{
 plot_TCR_circos(
      tcr_cells, tcr_links,
-     ring_colors=NULL,
-     link_colors=NULL, link_width=NULL,
-     filename=NULL, plottype="pdf", plotdims=c(12,12))
+     ring_colors = NULL,
+     link_colors = NULL, link_width = NULL,
+     filename = NULL, plottype = "pdf", plotdims = c(12,12))
 }
 \arguments{
 \item{tcr_cells}{data frame containing information at the cell level. Should include identifiers at minimum, as column "tcr1", plus optional columns for coloring the cells around the circos plot. Cells will be plotted in the order in which they are listed in this data frame.}

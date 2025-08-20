@@ -19,15 +19,15 @@
 #' @usage
 #' plot_TCR_circos(
 #'      tcr_cells, tcr_links,
-#'      ring_colors=NULL,
-#'      link_colors=NULL, link_width=NULL,
-#'      filename=NULL, plottype="pdf", plotdims=c(12,12))
+#'      ring_colors = NULL,
+#'      link_colors = NULL, link_width = NULL,
+#'      filename = NULL, plottype = "pdf", plotdims = c(12,12))
 plot_TCR_circos <-
   function(
     tcr_cells, tcr_links,
-    ring_colors=NULL,
-    link_colors=NULL, link_width=NULL,
-    filename=NULL, plottype="pdf", plotdims=c(12,12)) {
+    ring_colors = NULL,
+    link_colors = NULL, link_width = NULL,
+    filename = NULL, plottype = "pdf", plotdims = c(12,12)) {
 
     check_unique_tcr1 <-
       function(x) if (any(duplicated(x$tcr1)))
@@ -35,37 +35,37 @@ plot_TCR_circos <-
 
     checkmate::assert(
       checkmate::check_data_frame(tcr_cells),
-      checkmate::check_numeric(plotdims, lower=0, len=2),
+      checkmate::check_numeric(plotdims, lower = 0, len = 2),
       check_unique_tcr1(tcr_cells),
-      combine="and")
+      combine = "and")
 
     if (!requireNamespace("circlize", quietly = TRUE))
       stop("Package \"circlize\" needed for this function to work. Please install it.",
            call. = FALSE)
 
-    if (!is.null(filename)) plottype <- match.arg(plottype, choices=c("pdf", "png"))
+    if (!is.null(filename)) plottype <- match.arg(plottype, choices = c("pdf", "png"))
 
     # define limits for plotting
     n_cells <- nrow(tcr_cells)
     tcr_cells$xmin <- 0
-    tcr_cells$xmax = n_cells
+    tcr_cells$xmax <- n_cells
 
 
     if (!is.null(filename)) {
       if (plottype == "pdf") {
-        pdf(file=filename, width=plotdims[1], height=plotdims[2])
+        pdf(file = filename, width = plotdims[1], height = plotdims[2])
       } else if (plottype == "png")
-        png(filename=filename, width=plotdims[1], height=plotdims[2], units="in")
-      on.exit(dev.off(), add=TRUE) # close plotting device on exit
+        png(filename = filename, width = plotdims[1], height = plotdims[2], units = "in")
+      on.exit(dev.off(), add = TRUE) # close plotting device on exit
     } # SRP - want it to render into the current evironment/device, so don't open a new device.  Useful in Rmd documents.
-    #else dev.new(width=plotdims[1], height=plotdims[2])  ### open plotting window
+    # else dev.new(width = plotdims[1], height = plotdims[2])  ### open plotting window
 
-    par(mar=rep(0,4))
+    par(mar = rep(0,4))
     circlize::circos.clear()
 
     # basic circos graphic parameters
     circlize::circos.par(
-      cell.padding=c(0,0,0,0), track.margin=c(0,0.15), start.degree = 90, gap.degree = 0)
+      cell.padding = c(0,0,0,0), track.margin = c(0,0.15), start.degree = 90, gap.degree = 0)
 
     # sector details
     circlize::circos.initialize(
@@ -77,53 +77,56 @@ plot_TCR_circos <-
     }
     checkmate::assert_data_frame(
       tcr_cells[, ring_colors, drop=FALSE],
-      types="character")
+      types = "character")
 
     # plot sectors
     circlize::circos.trackPlotRegion(
-      ylim = c(0, 1), factors = tcr_cells$tcr1, track.height=0.1,
-      #panel.fun for each sector
+      ylim = c(0, 1), factors = tcr_cells$tcr1, track.height = 0.1,
+      # panel.fun for each sector
       panel.fun = function(x, y) {
-        #select details of current sector
+        # select details of current sector
         name = circlize::get.cell.meta.data("sector.index")
         i = circlize::get.cell.meta.data("sector.numeric.index")
         xlim = circlize::get.cell.meta.data("xlim")
         ylim = circlize::get.cell.meta.data("ylim")
 
-        if (length(ring_colors)==1) {
+        if (length(ring_colors) == 1) {
           # single loop
           circlize::circos.rect(
-            xleft=xlim[1], ybottom=ylim[1],
-            xright=xlim[2], ytop=ylim[2],
-            col = tcr_cells[i, ring_colors, drop=TRUE],
-            border = tcr_cells[i, ring_colors, drop=TRUE])
-        } else if (length(ring_colors)==2) {
+            xleft = xlim[1], ybottom = ylim[1],
+            xright = xlim[2], ytop = ylim[2],
+            col = tcr_cells[i, ring_colors, drop = TRUE],
+            border = tcr_cells[i, ring_colors, drop = TRUE])
+        } else if (length(ring_colors) == 2) {
 
           # colors for inner loop
           circlize::circos.rect(
-            xleft=xlim[1], ybottom=ylim[1],
-            xright=xlim[2], ytop=ylim[2]-0.5,
-            col = tcr_cells[i, ring_colors[1], drop=TRUE],
-            border = tcr_cells[i, ring_colors[1], drop=TRUE])
+            xleft = xlim[1], ybottom = ylim[1],
+            xright = xlim[2], ytop = ylim[2] - 0.5,
+            col = tcr_cells[i, ring_colors[1], drop = TRUE],
+            border = tcr_cells[i, ring_colors[1], drop = TRUE])
 
           # colors for outer loop
           circlize::circos.rect(
-            xleft=xlim[1], ybottom=ylim[1]+0.5,
-            xright=xlim[2], ytop=ylim[2],
-            col = tcr_cells[i, ring_colors[2], drop=TRUE],
-            border = tcr_cells[i, ring_colors[2], drop=TRUE])
+            xleft = xlim[1], ybottom = ylim[1] + 0.5,
+            xright = xlim[2], ytop = ylim[2],
+            col = tcr_cells[i, ring_colors[2], drop = TRUE],
+            border = tcr_cells[i, ring_colors[2], drop = TRUE])
         } else stop("Plotting with more than 2 loop colors is not currently supported.")
 
-        # blank in part of main sector
-        # circos.rect(xleft=xlim[1], ybottom=ylim[1], xright=xlim[2]-rowSums(m)[i], ytop=ylim[1]+0.3, col = "white", border = "white")
+        # # blank in part of main sector
+        # circos.rect(
+        #   xleft = xlim[1], ybottom = ylim[1], xright = xlim[2] - rowSums(m)[i], ytop = ylim[1] + 0.3,
+        #   col = "white", border = "white")
 
-        #white line all the way around
-        #circos.rect(xleft=xlim[1], ybottom=0.3, xright=xlim[2], ytop=0.32, col = "white", border = "white")
+        # # white line all the way around
+        # circos.rect(xleft = xlim[1], ybottom = 0.3, xright = xlim[2], ytop = 0.32,
+        #             col = "white", border = "white")
 
-        #plot axis
-        circlize::circos.axis(
-          labels.cex=0.00000001, major.at=seq(from=0,to=floor(tcr_cells$xmax)[i],by=500)
-          )
+        # # plot axis (removed for better visual)
+        # circlize::circos.axis(
+        #   labels.cex = 0.00000001, major.at = seq(from = 0, to = floor(tcr_cells$xmax)[i], by = 500)
+        #   )
       })
 
     ### plot links
@@ -138,15 +141,15 @@ plot_TCR_circos <-
 
         if (is.null(link_colors)) {
           link_colors <- "default"
-          tcr_links[,link_colors] <- "black"
+          tcr_links[, link_colors] <- "black"
         }
-        checkmate::assert_character(tcr_links[, link_colors, drop=TRUE])
+        checkmate::assert_character(tcr_links[, link_colors, drop = TRUE])
 
         if (is.null(link_width)) {
           link_width <- "default"
-          tcr_links[,link_width] <- 1
+          tcr_links[, link_width] <- 1
         }
-        checkmate::assert_numeric(tcr_links[, link_width, drop=TRUE])
+        checkmate::assert_numeric(tcr_links[, link_width, drop = TRUE])
 
         for (k in 1:nrow(tcr_links)) {
           # for(k in 1){
@@ -156,10 +159,10 @@ plot_TCR_circos <-
 
           # draw links, colored by selected variable
           circlize::circos.link(
-            sector.index1=tcr_cells$tcr1[i], point1=c(tcr_cells$sum[i]),
-            sector.index2=tcr_cells$tcr1[j], point2=c(tcr_cells$sum[j]),
-            col = tcr_links[k, link_colors, drop=TRUE], rou1=0.75, rou2=0.75,
-            lwd = tcr_links[k, link_width, drop=TRUE]*1.5)
+            sector.index1 = tcr_cells$tcr1[i], point1 = c(tcr_cells$sum[i]),
+            sector.index2 = tcr_cells$tcr1[j], point2 = c(tcr_cells$sum[j]),
+            col = tcr_links[k, link_colors, drop = TRUE], rou1 = 0.75, rou2 = 0.75,
+            lwd = tcr_links[k, link_width, drop = TRUE] * 1.5)
         }
       }
     }

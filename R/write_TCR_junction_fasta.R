@@ -12,12 +12,12 @@
 #' @export
 #' @usage
 #' write_TCR_junction_fasta(
-#'   tcrs, filename="tcr_junctions.fasta",
-#'   pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
-#'   sample_col="libid",
-#'   cols_for_name=c(sample_col, "cln_count", "v_gene", "j_gene", "junction"),
-#'   junction_col="junction",
-#'   unique_only=TRUE)
+#'   tcrs, filename = "tcr_junctions.fasta",
+#'   pos_control = ">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
+#'   sample_col = "libid",
+#'   cols_for_name = c(sample_col, "cln_count", "v_gene", "j_gene", "junction"),
+#'   junction_col = "junction",
+#'   unique_only = TRUE)
 #' @details
 #' This function outputs a file designed to be used for a BLAST query on
 #' https://blast.ncbi.nlmh.nih.gov. On that site, use protein blast (blastp), under "Choose File",
@@ -26,12 +26,12 @@
 #' set Expect threshold to 1000 (to account for the length of the sequences being queried). If you
 #' included the default pos_control, you should see it match to protein accession 1OGA_D.
 write_TCR_junction_fasta <-
-  function(tcrs, filename="tcr_junctions.fasta",
-           pos_control=">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
-           sample_col="libid",
-           cols_for_name=c(sample_col, "cln_count", "v_gene", "j_gene", "junction"),
-           junction_col="junction",
-           unique_only=TRUE) {
+  function(tcrs, filename = "tcr_junctions.fasta",
+           pos_control = ">flu_1_TRBV_CAGAGSQGNLIF CAGAGSQGNLIF",
+           sample_col = "libid",
+           cols_for_name = c(sample_col, "cln_count", "v_gene", "j_gene", "junction"),
+           junction_col = "junction",
+           unique_only = TRUE) {
 
     if (!is.data.frame(tcrs)) stop("Input tcrs object must be a data frame")
     tcrs <- as.data.frame(tcrs)
@@ -50,12 +50,12 @@ write_TCR_junction_fasta <-
     }
 
     tcrs <- tcrs[,union(cols_for_name, junction_col)]
-    if (unique_only) tcrs <- tcrs[!duplicated(tcrs[,cols_for_name]),]
+    if (unique_only) tcrs <- tcrs[!duplicated(tcrs[, cols_for_name]),]
 
   sink(filename); on.exit(sink())
-  cat(stringr::str_replace(pos_control, " ", "\r\n"), "\r\n", sep="")
+  cat(stringr::str_replace(pos_control, " ", "\r\n"), "\r\n", sep = "")
   for (i in 1:nrow(tcrs))
-    cat(">", paste(tcrs[i,cols_for_name], collapse="_"), "\r\n",
-        tcrs[i,junction_col], "\r\n", sep="")
+    cat(">", paste(tcrs[i, cols_for_name], collapse = "_"), "\r\n",
+        tcrs[i, junction_col], "\r\n", sep = "")
 
 }

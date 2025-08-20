@@ -1,16 +1,21 @@
 Package: TCRtools
 Title: Helper functions for analyzing TCR sequence data from single-cell RNA-seq
-Version: 0.0.0.9003
-Authors@R: person("Matthew", "Dufort", email = "matt.dufort@gmail.com", role = c("aut", "cre"))
+Version: 0.0.0.9004
+Authors@R: person("Matthew", "Dufort", email = "mdufort@benaroyaresearch.org", role = c("aut", "cre"))
 Description: This package includes a number of functions for manipulating and/or analyzing TCR sequences from single-cell RNA-seq data. It is a work in progress, with new functions being added regularly to expand functionality and simplify existing processes.
 Imports:
 	stringr,
 	magrittr,
-	checkmate
+	dplyr,
+	rlang,
+	checkmate,
+	miscHelpers
+Remotes:
+	BenaroyaResearch/miscHelpers
 Suggests:
 	circlize
 Depends: R (>= 3.2.2)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2

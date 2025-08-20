@@ -6,10 +6,10 @@
 \usage{
 match_TCR_chains(
      tcrs,
-     id_col="libid",
-     junction_col="junction",
-     match_V_gene=TRUE, match_J_gene=TRUE,
-     V_gene_col="v_gene", J_gene_col="j_gene")
+     id_col = "libid",
+     junction_col = "junction",
+     match_V_gene = TRUE, match_J_gene = TRUE,
+     V_gene_col = "v_gene", J_gene_col = "j_gene")
 }
 \arguments{
 \item{tcrs}{a data frame containing the TCR sequences. Should include an identifier column, plus columns for junction and optionally the V and J genes.}

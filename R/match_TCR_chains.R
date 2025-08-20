@@ -17,16 +17,16 @@
 #' @usage
 #' match_TCR_chains(
 #'      tcrs,
-#'      id_col="libid",
-#'      junction_col="junction",
-#'      match_V_gene=TRUE, match_J_gene=TRUE,
-#'      V_gene_col="v_gene", J_gene_col="j_gene")
+#'      id_col = "libid",
+#'      junction_col = "junction",
+#'      match_V_gene = TRUE, match_J_gene = TRUE,
+#'      V_gene_col = "v_gene", J_gene_col = "j_gene")
 match_TCR_chains <-
   function(tcrs,
-           id_col="libid",
-           junction_col="junction",
-           match_V_gene=TRUE, match_J_gene=TRUE,
-           V_gene_col="v_gene", J_gene_col="j_gene") {
+           id_col = "libid",
+           junction_col = "junction",
+           match_V_gene = TRUE, match_J_gene = TRUE,
+           V_gene_col = "v_gene", J_gene_col = "j_gene") {
     checkmate::assert_data_frame(tcrs)
 
     # convert numeric column identifiers to column names
@@ -45,16 +45,16 @@ match_TCR_chains <-
     tcrs <- unique(tcrs)
 
     # match cells by shared junctions
-    tcrs.match <- merge(tcrs, tcrs, by=match_cols)
+    tcrs.match <- merge(tcrs, tcrs, by = match_cols)
 
     # remove self-matches
     tcrs.match <-
-      tcrs.match[tcrs.match[, paste0(id_col, ".x"), drop=TRUE] !=
-                   tcrs.match[, paste0(id_col, ".y"), drop=TRUE],]
+      tcrs.match[tcrs.match[, paste0(id_col, ".x"), drop = TRUE] !=
+                   tcrs.match[, paste0(id_col, ".y"), drop = TRUE],]
 
     # rename identifer columns
-    colnames(tcrs.match)[colnames(tcrs.match)==paste0(id_col, ".x")] <- "tcr1"
-    colnames(tcrs.match)[colnames(tcrs.match)==paste0(id_col, ".y")] <- "tcr2"
+    colnames(tcrs.match)[colnames(tcrs.match) == paste0(id_col, ".x")] <- "tcr1"
+    colnames(tcrs.match)[colnames(tcrs.match) == paste0(id_col, ".y")] <- "tcr2"
 
     tcrs.match
   }

@@ -5,8 +5,8 @@
 \title{Read the alignment output hit table .txt file from a TCR sequence BLAST query}
 \usage{
 read_BLAST_TCR_align_hits(
-    filename, identity_threshold=100, length_threshold=100,
-    query_seq_in_name=TRUE)
+    filename, identity_threshold = 100, length_threshold = 100,
+    query_seq_in_name = TRUE)
 }
 \arguments{
 \item{filename}{character string, the path and file name to read.}
